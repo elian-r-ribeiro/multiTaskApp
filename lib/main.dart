@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:project_test/views/form.dart';
+import 'package:project_test/views/list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,15 +9,22 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        // This is the theme of your application.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: false,
       ),
-      home: const MyWidget(),
+      home: MyWidget(),
+      routes: {
+        //  '/': (context) => MyWidget(),
+        'listaDeTarefas': (context) => ListViewTasks(),
+        'formDeTarefas': (context) => FormViewTasks()
+      },
     );
   }
 }
@@ -31,58 +40,53 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 22, 22, 22),
-      appBar: AppBar(
-        title: Text('Tasks list'),
-        backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('Lista de tarefas')),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              accountName: Text(
+                'Paulin Bacana',
+                style: TextStyle(fontSize: 24),
+              ),
+              accountEmail: Text('paulinbacana@gmail.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor: Colors.white,
+                child: Icon(Icons.person),
+              ),
+            ),
+            ListTile(
+              title: Text(
+                'Lista de Tarefas',
+                style: TextStyle(fontSize: 17),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, 'listaDeTarefas');
+              },
+              leading: Icon(
+                Icons.list,
+                size: 28,
+              ),
+            ),
+            Divider(
+              thickness: 2,
+            )
+          ],
+        ),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Card(
-            child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Title",
-                            style: TextStyle(
-                                fontSize: 21,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline),
-                          ),
-                          Radio(
-                              value: "", groupValue: "", onChanged: (value) {})
-                        ]),
-                    Text(
-                      "Description",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            print("Edit icon");
-                          },
-                          icon: Icon(Icons.edit),
-                          color: Colors.green,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            print("Delete icon");
-                          },
-                          icon: Icon(Icons.delete),
-                          color: Colors.red,
-                        )
-                      ],
-                    )
-                  ],
-                )),
-          )
+          Padding(
+              padding: EdgeInsets.only(bottom: 20, right: 10),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'formDeTarefas');
+                  },
+                  child: Icon(Icons.add),
+                ),
+              ))
         ],
       ),
     );
