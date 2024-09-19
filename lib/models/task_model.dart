@@ -1,4 +1,4 @@
-class Task {
+class Task{
   String? title;
   String? description;
   bool? isDone;
@@ -6,19 +6,14 @@ class Task {
 
   Task({this.title, this.description, this.isDone, this.priority});
 
-  Map tojson() {
-    return {
-      'title': title,
-      'description': description,
-      'isDone': isDone,
-      'priority': priority
-    };
+  Map tojson(){
+    return{'title': title, 'description': description, 'isDone': isDone, 'priority': priority};
   }
 
-  Task.fromJson(Map<String, dynamic> json) {
+  Task.fromJson(Map<String, dynamic> json){
     title = json['title'];
     description = json['description'];
-    isDone = json['isDone'];
+    isDone = json['isDone'] ?? false;
     priority = json['priority'];
   }
 }

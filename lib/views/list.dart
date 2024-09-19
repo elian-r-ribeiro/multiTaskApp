@@ -36,6 +36,26 @@ class _ListViewTasksState extends State<ListViewTasks> {
             itemCount: tasks.length,
             itemBuilder: (context, index) {
               bool localIsDone = tasks[index].isDone ?? false;
+              String priority = tasks[index].priority ?? 'baixa';
+
+              Color priorityColor;
+              String priorityText;
+
+              switch (priority) {
+                case 'média':
+                  priorityColor = Colors.orange;
+                  priorityText = 'Prioridade Média';
+                  break;
+                case 'alta':
+                  priorityColor = Colors.red;
+                  priorityText = 'Prioridade Alta';
+                  break;
+                case 'baixa':
+                default:
+                  priorityColor = Colors.green;
+                  priorityText = 'Prioridade Baixa';
+                  break;
+              }
               return Card(
                   color: Colors.grey[200],
                   child: Padding(
@@ -48,15 +68,15 @@ class _ListViewTasksState extends State<ListViewTasks> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    tasks[index].title.toString(),
+                                    (tasks[index].title.toString()),
                                     style: TextStyle(
                                         fontSize: 22,
-                                        decoration: localIsDone
-                                            ? TextDecoration.lineThrough
-                                            : null,
                                         color: localIsDone
                                             ? Colors.grey
-                                            : Colors.black),
+                                            : Colors.blue,
+                                        decoration: localIsDone
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none),
                                   ),
                                   Checkbox(
                                       value: tasks[index].isDone ?? false,
@@ -69,52 +89,41 @@ class _ListViewTasksState extends State<ListViewTasks> {
                                         setState(() {
                                           tasks[index].isDone = value;
                                         });
-                                      }),
-                                  // Radio(
-                                  //     value: true,
-                                  //     groupValue: tasks[index].isDone,
-                                  //     onChanged: (value) {
-                                  //       if (value != null) {
-                                  //         taskService.editTask(
-                                  //             index,
-                                  //             tasks[index].title!,
-                                  //             tasks[index].description!);
-                                  //       }
-                                  //     })
+                                      })
                                 ]),
                             Text(
                               tasks[index].description.toString(),
                               style: TextStyle(
+                                  fontSize: 22,
                                   color:
-                                      localIsDone ? Colors.grey : Colors.black,
+                                      localIsDone ? Colors.grey : Colors.blue,
                                   decoration: localIsDone
                                       ? TextDecoration.lineThrough
-                                      : null),
+                                      : TextDecoration.none),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
                                     onPressed: () async {
-                                      Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FormViewTasks(
-                                                        task: tasks[index],
-                                                        index: index,
-                                                      )))
-                                          .then((value) => getAllTasks());
+                                      if (localIsDone == false) {
+                                        Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FormViewTasks(
+                                                            task: tasks[index],
+                                                            index: index)))
+                                            .then((value) => getAllTasks());
+                                      }
                                     },
-                                    icon: localIsDone
-                                        ? SizedBox.shrink()
-                                        : Icon(
-                                            Icons.edit,
-                                            color: Colors.blue,
-                                          )),
+                                    icon: Icon(
+                                      localIsDone ? null : Icons.edit,
+                                      color: Colors.blue,
+                                    )),
                                 IconButton(
                                     onPressed: () async {
-                                      await taskService.deleteTask(index);
+                                      await taskService.deleteTasks(index);
                                       getAllTasks();
                                     },
                                     icon: Icon(
@@ -122,8 +131,18 @@ class _ListViewTasksState extends State<ListViewTasks> {
                                       color: localIsDone
                                           ? Colors.grey
                                           : Colors.red,
-                                    ))
+                                    )),
                               ],
+                            ),
+                            Text(
+                              priorityText,
+                              style: TextStyle(
+                                  decoration: localIsDone
+                                      ? TextDecoration.lineThrough
+                                      : TextDecoration.none,
+                                  color:
+                                      localIsDone ? Colors.grey : priorityColor,
+                                  fontWeight: FontWeight.bold),
                             )
                           ])));
             }));
