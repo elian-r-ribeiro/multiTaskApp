@@ -94,7 +94,7 @@ class _ListViewTasksState extends State<ListViewTasks> {
                             Text(
                               tasks[index].description.toString(),
                               style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 14,
                                   color:
                                       localIsDone ? Colors.grey : Colors.blue,
                                   decoration: localIsDone

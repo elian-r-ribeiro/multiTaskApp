@@ -75,11 +75,15 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Lista de tarefas')),
+      appBar: AppBar(
+        title: Text('Lista de tarefas'),
+        backgroundColor: Colors.black,
+      ),
       drawer: Drawer(
         child: Column(
           children: [
             UserAccountsDrawerHeader(
+                decoration: BoxDecoration(color: Colors.black),
                 accountName: Text(
                   'Elian',
                   style: TextStyle(fontSize: 24),
